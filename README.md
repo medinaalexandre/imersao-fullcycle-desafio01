@@ -23,11 +23,11 @@
   - [x] **POST /events/:eventId/reserve**
     - spots: obrigatório, array, string
     - ticket_kind: obrigatório, precisa ter os valores “full” ou “half”
-- 
-- [ ] Tratar melhor os erros da operação de reserva via recurso exception filter do Nest.js
-- [ ] Quando os spots passados não existirem lançar um erro 404 com body “{message: Spots not exists: A1, C3, D5, etc}”
-- [ ] Quando os spots passados não existirem disponíveis para reservar um erro 400 com body “{message: Spots A1 is not available for reservation”
-- [ ] Quando lançar um erro no trecho transaction do prisma, precisa responder com status 400 + a mensagem do erro
+
+- [x] Tratar melhor os erros da operação de reserva via recurso exception filter do Nest.js
+- [x] Quando os spots passados não existirem lançar um erro 404 com body “{message: Spots not exists: A1, C3, D5, etc}”
+- [x] Quando os spots passados não existirem disponíveis para reservar um erro 400 com body “{message: Spots A1 is not available for reservation”
+- [x] Quando lançar um erro no trecho transaction do prisma, precisa responder com status 400 + a mensagem do erro
 
 Compartilhe o link do repositório Git.
 

@@ -4,6 +4,9 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { ReserveSpotDto } from './dto/reserve-spot.dto';
 import { Prisma, SpotStatus, TicketStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { InvalidSpotException } from '../common/invalid-spot.exception';
+import { AlreadyTakenException } from '../common/already-taken.exception';
+import { DatabaseTransactionException } from '../common/database-transaction.exception';
 
 @Injectable()
 export class EventsService {
@@ -54,7 +57,19 @@ export class EventsService {
       const notFoundSpotsName = dto.spots.filter(
         (spotName) => !foundSpotsName.includes(spotName),
       );
-      throw new Error(`Spots ${notFoundSpotsName.join(', ')} not found`);
+      throw new InvalidSpotException(
+        `Spots ${notFoundSpotsName.join(', ')} not found`,
+      );
+    }
+
+    const alreadyReserved = spots
+      .filter((spot) => spot.status === SpotStatus.reserved)
+      .map((spot) => spot.name);
+
+    if (alreadyReserved.length) {
+      throw new AlreadyTakenException(
+        `Spots ${alreadyReserved.join(', ')} already taken by someone else`,
+      );
     }
 
     try {
@@ -69,7 +84,7 @@ export class EventsService {
             })),
           });
 
-          prisma.spot.updateMany({
+          await prisma.spot.updateMany({
             where: {
               id: {
                 in: spots.map((spot) => spot.id),
@@ -80,7 +95,7 @@ export class EventsService {
             },
           });
 
-          const tickets = await Promise.all(
+          return await Promise.all(
             spots.map((spot) =>
               prisma.ticket.create({
                 data: {
@@ -91,18 +106,12 @@ export class EventsService {
               }),
             ),
           );
-
-          return tickets;
         },
         { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted },
       );
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        switch (e.code) {
-          case 'P2002':
-          case 'P2034':
-            throw new Error('Some spots are already reserved');
-        }
+        throw new DatabaseTransactionException(e.message);
       }
 
       throw e;

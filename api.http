@@ -10,8 +10,8 @@ Content-Type: application/json
 {
   "name": "New Event",
   "description": "This is a new event",
-  "date": "2024-01-01T00:00:002",
-  "price": 100
+  "date": "2024-01-01T00:00:00",
+  "price": 99
 }
 ###
 
@@ -54,7 +54,7 @@ POST http://localhost:3000/events/{{eventId}}/reserve
 Content-Type: application/json
 
 {
-  "spots": ["{{ spotName }}"],
+  "spots": ["A3"],
   "ticket_kind": "full",
   "email": "test@test.com"
 }
