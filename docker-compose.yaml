@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+
+  db:
+    image: mysql:8.0.30-debian
+    environment:
+      MYSQL_DATABASE: desafio01
+    ports:
+      - 3306:3306
