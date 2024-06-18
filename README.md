@@ -9,7 +9,7 @@
 - [x] A aplicação rodará novamente na porta convencional 3000.
 - [x] Use Docker Compose como usamos na aula
 - [x] Use apenas a variável MYSQL_DATABASE no docker-compose.yaml em vez do docker-entrypoint-initdb.d
-- [ ] Validar os dados de entrada de alguns endpoints, ao passar os dados inválidos o Nest.js precisa retornar o status 422 informando os problemas encontrados
+- [x] Validar os dados de entrada de alguns endpoints, ao passar os dados inválidos o Nest.js precisa retornar o status 422 informando os problemas encontrados
 
   - [x] **POST /events**
     - name: obrigatório, string, máximo 255
